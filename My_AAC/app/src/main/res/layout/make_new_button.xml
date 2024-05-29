@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AAC BUTTON NAME"
+        style="@style/TitleStyle"/>
+    <EditText
+        android:id="@+id/insert_aac_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="insert your aac button's name here"
+        android:maxLines="1"
+        style="@style/EditTextStyle"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AAC BUTTON IMAGE"
+        style="@style/TitleStyle"/>
+    <ImageView
+        android:id="@+id/insert_aac_image"
+        android:src="@drawable/no_image"
+        android:layout_gravity="center"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AAC BUTTON DESCRIPTION"
+        style="@style/TitleStyle"/>
+    <EditText
+        android:id="@+id/insert_aac_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="insert your description here"
+        android:maxLines="1"
+        style="@style/EditTextStyle"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="VOICE SELECTION"
+        style="@style/TitleStyle"/>
+    <Spinner
+        android:id="@+id/voice_select_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:entries="@array/voice_array"/>
+    <Button
+        android:id="@+id/aac_submit_button"
+        android:background="@drawable/button_design"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        android:textSize="20dp"/>
+</LinearLayout>
