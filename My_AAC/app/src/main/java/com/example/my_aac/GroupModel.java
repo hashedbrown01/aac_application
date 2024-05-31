@@ -1,12 +1,20 @@
 package com.example.my_aac;
 
-public class GroupModel {
-    private int id;
-    String imageId;
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    public GroupModel(int id, String imageId) {
+import androidx.annotation.NonNull;
+
+public class GroupModel implements Parcelable {
+    private int id;
+    String name;
+    String imagePath;
+
+    public GroupModel(int id, String name, String imagePath) {
         this.id = id;
-        this.imageId = imageId;
+        this.name = name;
+        this.imagePath = imagePath;
     }
 
     public int getId() {
@@ -17,13 +25,47 @@ public class GroupModel {
         this.id = id;
     }
 
-    public String getImageId() {
-        return imageId;
+    public String getName() {
+        return name;
     }
 
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
 
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(imagePath);
+    }
+    protected GroupModel(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        imagePath = in.readString();
+    }
+    public static final Creator<GroupModel> CREATOR = new Creator<GroupModel>() {
+        @Override
+        public GroupModel createFromParcel(Parcel in) {
+            return new GroupModel(in);
+        }
+
+        @Override
+        public GroupModel[] newArray(int size) {
+            return new GroupModel[size];
+        }
+    };
 }

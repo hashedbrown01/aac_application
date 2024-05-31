@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SPManager {
@@ -31,8 +32,12 @@ public class SPManager {
 
     public List<GroupModel> getGroupList(){
         String json = sharedPreferences.getString(GROUP_KEY, null);
-        Type type = new TypeToken<List<GroupModel>>() {}.getType();
-        return gson.fromJson(json, type);
+        if (json != null) {
+            Type type = new TypeToken<List<GroupModel>>() {}.getType();
+            return gson.fromJson(json, type);
+        } else {
+            return new ArrayList<>(); // 빈 리스트 반환
+        }
     }
 
     public void saveAACList(List<AACModel> list){

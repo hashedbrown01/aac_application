@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -28,6 +29,15 @@
         <activity android:name=".Option"/>
         <activity android:name=".AacGroup"/>
         <activity android:name=".CreateAAC"/>
+        <activity
+            android:name=".CreateGroup"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
