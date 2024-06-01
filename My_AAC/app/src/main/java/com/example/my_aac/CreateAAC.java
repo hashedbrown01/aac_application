@@ -41,7 +41,7 @@ public class CreateAAC extends Activity {
         imagePath = String.valueOf(context.getFilesDir()) + "/aac_images/";
 
         intent = getIntent();
-        id = intent.getIntExtra("aac_id", 0);
+        id = View.generateViewId();
         parent_id = intent.getIntExtra("parent_id", 0);
 
         String inputName = name.getText().toString().trim();
@@ -83,6 +83,12 @@ public class CreateAAC extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onStart();
     }
 
     @Override

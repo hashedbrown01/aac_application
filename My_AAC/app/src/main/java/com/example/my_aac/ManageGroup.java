@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,16 +47,33 @@ public class ManageGroup {
                 while (iterator.hasNext()) {
                     GroupModel model = iterator.next();
                     if (model.getId() == groupModel.getId()) {
+                        // AACModel 삭제
+                        List<AACModel> aac_list = spManager.getAACList();
+                        Iterator<AACModel> aac_iterator = aac_list.iterator();
+                        while (aac_iterator.hasNext()) {
+                            AACModel aacModel = aac_iterator.next();
+                            if (aacModel.getParent_id() == groupModel.getId()) {
+                                // AACModel 삭제
+                                aac_iterator.remove();
+                                deleteFile(aacModel.getFilePath(), aacModel.getAacTitle());
+                            }
+                        }
+
+                        // GroupModel 삭제
                         iterator.remove();
                         deleteFile(groupModel.getImagePath(), groupModel.getName());
+
+                        // 저장
+                        spManager.saveAACList(aac_list);
                         spManager.saveGroupList(list);
+                        layout.removeView(v);
+                        Toast.makeText(context, "The Group and AAC Buttons are Deleted", Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
-                layout.removeView(v);
-                return true;
-            }
 
+                return true; // 롱 클릭 이벤트를 소비함
+            }
         });
         layout.addView(imageView);
     }

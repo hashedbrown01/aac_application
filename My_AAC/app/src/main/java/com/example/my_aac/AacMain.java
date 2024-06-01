@@ -12,18 +12,18 @@
     import android.widget.Button;
     import android.widget.GridLayout;
     import android.widget.ImageButton;
-    import android.widget.ImageView;
     import android.widget.LinearLayout;
     import android.widget.Toast;
 
     import androidx.annotation.Nullable;
-    import androidx.constraintlayout.widget.Group;
 
     import java.util.List;
+    import java.util.StringTokenizer;
 
 
     public class AacMain extends Activity {
         private List<GroupModel> group_list;
+        private List<AACModel> aac_list;
         private SPManager spManager;
         private LinearLayout group_container;
         private Button add_group_button;
@@ -46,8 +46,33 @@
 
             spManager = new SPManager(getApplicationContext());
             group_list = spManager.getGroupList();
+            aac_list = spManager.getAACList();
+
+            if(aac_list != null){
+                GridLayout gridLayout = findViewById(R.id.main_aac_container);
+                SharedPreferences sharedPreferences = getSharedPreferences("recent_aac_log", Context.MODE_PRIVATE);
+                String recentAAC = sharedPreferences.getString("recent_aac_id", "");
+
+                if(!recentAAC.isEmpty()){
+                    String[] idarray = recentAAC.split(",");
+                    int[] aac_ids = new int[idarray.length];
+
+                    for(int i  = 0; i < idarray.length; i++){
+                        aac_ids[i] = Integer.parseInt(idarray[i]);
+                    }
+
+                    for(int k = 0; k < aac_ids.length; k++){
+                        for(int j = 0; j < aac_list.size(); j++){
+                            AACModel aacModel = aac_list.get(j);
+                            if(aacModel.getId() == aac_ids[k]){
+                                ManageAAC.showAAC(AacMain.this, gridLayout, aacModel);
+                            }
+                        }
+                    }
+                }
+            }
+
             if(group_list != null){
-                Log.d("AAC_MAIN", String.valueOf(group_list.size()));
                 group_number = group_list.size();
             }
 
@@ -57,6 +82,7 @@
                 @Override
                 public void onClick(View v) {
                     intent.putExtra("group_id", basic_group0.getId());
+                    intent.putExtra("group_name", "BASIC GROUP 0");
                     startActivity(intent);
                 }
             });
@@ -65,6 +91,7 @@
                 @Override
                 public void onClick(View v) {
                     intent.putExtra("group_id", basic_group1.getId());
+                    intent.putExtra("group_name", "BASIC GROUP 1");
                     startActivity(intent);
                 }
             });
@@ -74,6 +101,7 @@
                 public void onClick(View v) {
                     ImageButton imageButton = new ImageButton(getApplicationContext());
                     intent.putExtra("group_id", basic_group2.getId());
+                    intent.putExtra("group_name", "BASIC GROUP 2");
                     startActivity(intent);
                 }
             });
@@ -107,6 +135,39 @@
                     }
                 }
             });
+        }
+
+        @Override
+        protected void onResume() {
+            super.onResume();
+            spManager = new SPManager(getApplicationContext());
+            aac_list = spManager.getAACList();
+
+            if(aac_list != null){
+                GridLayout gridLayout = findViewById(R.id.main_aac_container);
+                gridLayout.removeAllViews();
+
+                SharedPreferences sharedPreferences = getSharedPreferences("recent_aac_log", Context.MODE_PRIVATE);
+                String recentAAC = sharedPreferences.getString("recent_aac_id", "");
+                Log.d("a", recentAAC);
+                if(!recentAAC.isEmpty()){
+                    String[] idarray = recentAAC.split(",");
+                    int[] aac_ids = new int[idarray.length];
+
+                    for(int i  = 0; i < aac_ids.length; i++){
+                        aac_ids[i] = Integer.parseInt(idarray[i]);
+                    }
+
+                    for(int k = 0; k < aac_ids.length; k++){
+                        for(int j = 0; j < aac_list.size(); j++){
+                            AACModel aacModel = aac_list.get(j);
+                            if(aacModel.getId() == aac_ids[k]){
+                                ManageAAC.showAAC(AacMain.this, gridLayout, aacModel);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         @Override

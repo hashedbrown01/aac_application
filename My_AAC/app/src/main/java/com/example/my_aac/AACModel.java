@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.Comparator;
+import java.util.Date;
+
 //AAC의 정보를 저장하는 모델 클래스
 public class AACModel implements Parcelable {
     //AAC를 구분하는 ID
@@ -20,10 +23,6 @@ public class AACModel implements Parcelable {
     private String aacDescription;
     //AAC의 Voice Type
     private String voiceType;
-
-    public AACModel(){
-
-    }
     public AACModel(int id, int parent_id, String filePath, String aacTitle, String aacDescription, String voiceType) {
         this.id = id;
         this.parent_id = parent_id;
@@ -94,7 +93,6 @@ public class AACModel implements Parcelable {
         dest.writeString(aacTitle);
         dest.writeString(aacDescription);
         dest.writeString(voiceType);
-
     }
     protected AACModel(Parcel in) {
         id = in.readInt();

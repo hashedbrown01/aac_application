@@ -65,34 +65,12 @@
         style="@style/TitleStyle"/>
 
     <GridLayout
+        android:id="@+id/main_aac_container"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="2">
 
-        <ImageButton
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/no_image" />
-
-        <ImageButton
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/no_image" />
-
-        <ImageButton
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/no_image" />
-
-        <ImageButton
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/no_image" />
     </GridLayout>
 
 </LinearLayout>

@@ -1,12 +1,18 @@
 package com.example.my_aac;
 
+import static com.example.my_aac.ManageAAC.loadBitmap;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,14 +42,11 @@ public class AacGroup extends Activity {
 
         if(aac_list !=null){
             for(int i = 0; i < aac_list.size(); i++){
-                Log.d("AACGROUP", String.valueOf(aac_list.size()));
 
                 AACModel aacModel = aac_list.get(i);
-                Log.d("parent True", String.valueOf(parent_id));
-                Log.d("parent aac", String.valueOf(aacModel.getParent_id()));
                 if(parent_id == aacModel.getParent_id()){
                     //부모 뷰가 맞을 때 확인하고 뷰 생성
-                    ManageAAC.showAAC(getApplicationContext(), gridLayout, aacModel);
+                    ManageAAC.showAAC(AacGroup.this, gridLayout, aacModel);
                 }
             }
         }
