@@ -1,10 +1,13 @@
 package com.example.my_aac;
 
+import static android.speech.tts.TextToSpeech.ERROR;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -16,18 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import static android.speech.tts.TextToSpeech.ERROR;
 
 
 public class ManageAAC {
@@ -37,7 +35,6 @@ public class ManageAAC {
         View layout = inflater.inflate(R.layout.aac_button, null);
         TextView textView = layout.findViewById(R.id.aac_name);
         ImageView imageView = layout.findViewById(R.id.aac_image);
-        SPManager spManager = new SPManager(context);
 
         textView.setText(aacModel.getAacTitle());
         imageView.setImageBitmap(loadBitmap(aacModel.getFilePath()));
@@ -82,7 +79,6 @@ public class ManageAAC {
         gridLayout.addView(layout);
     }
     public static void createAAC(Context context, GridLayout gridLayout, AACModel aacModel){
-        Bitmap bitmap = loadBitmap(aacModel.getFilePath());
 
         SPManager spManager = new SPManager(context);
         List<AACModel> list = spManager.getAACList();
@@ -112,8 +108,11 @@ public class ManageAAC {
 
         try{
             fileCache.createNewFile();
-            out = new FileOutputStream(fileCache);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                out = Files.newOutputStream(fileCache.toPath());
+            }
 
+            assert out != null;
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (IOException e) {
             e.printStackTrace();
@@ -128,20 +127,12 @@ public class ManageAAC {
         }
     }
 
-    public static boolean deleteFile(String filePath, String filename) {
+    public static void deleteFile(String filePath, String filename) {
         File file = new File(filePath + filename + ".jpg");
         if (file.exists()) {
-            if (file.delete()) {
-                // 파일 삭제 성공
-                return true;
-            } else {
-                // 파일 삭제 실패
-                return false;
-            }
-        } else {
-            // 파일이 존재하지 않음
-            return false;
+            file.delete();
         }
+
     }
 
     private static void saveRecentAAC(Context context, int aacId){

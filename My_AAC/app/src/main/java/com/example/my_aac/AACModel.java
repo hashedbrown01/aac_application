@@ -5,24 +5,21 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.util.Comparator;
-import java.util.Date;
-
 //AAC의 정보를 저장하는 모델 클래스
 public class AACModel implements Parcelable {
     //AAC를 구분하는 ID
     private int id;
 
     //해당 AAC를 포함하는 Group의 ID
-    private int parent_id;
-    private String filePath;
+    private final int parent_id;
+    private final String filePath;
     //AAC의 제목
-    private String aacTitle;
+    private final String aacTitle;
 
     //AAC의 설명
-    private String aacDescription;
+    private final String aacDescription;
     //AAC의 Voice Type
-    private String voiceType;
+    private final String voiceType;
     public AACModel(int id, int parent_id, String filePath, String aacTitle, String aacDescription, String voiceType) {
         this.id = id;
         this.parent_id = parent_id;
@@ -44,40 +41,20 @@ public class AACModel implements Parcelable {
         return parent_id;
     }
 
-    public void setParent_id(int parent_id) {
-        this.parent_id = parent_id;
-    }
-
     public String getFilePath() {
         return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     public String getAacTitle() {
         return aacTitle;
     }
 
-    public void setAacTitle(String aacTitle) {
-        this.aacTitle = aacTitle;
-    }
-
     public String getAacDescription() {
         return aacDescription;
     }
 
-    public void setAacDescription(String aacDescription) {
-        this.aacDescription = aacDescription;
-    }
-
     public String getVoiceType() {
         return voiceType;
-    }
-
-    public void setVoiceType(String voiceType) {
-        this.voiceType = voiceType;
     }
 
     @Override

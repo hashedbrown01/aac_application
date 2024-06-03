@@ -15,8 +15,8 @@ public class SPManager {
     private static final String PREF_NAME = "group_pref";
     private static final String GROUP_KEY = "group_list";
     private static final String AAC_KEY = "aac_list";
-    private SharedPreferences sharedPreferences;
-    private Gson gson;
+    private final SharedPreferences sharedPreferences;
+    private final Gson gson;
 
     public SPManager(Context context){
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

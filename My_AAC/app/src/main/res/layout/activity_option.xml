@@ -6,14 +6,14 @@
     android:orientation="vertical"
     android:padding="15dp">
     <TextView
-        android:text="OPTION"
+        android:text="@string/option_en"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TitleStyle"
         android:layout_marginBottom="100dp"/>
     <TextView
-        android:text="VOICE SOUND SETTING"
+        android:text="@string/voice_sound_setting_en"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/TitleStyle"/>
@@ -26,8 +26,8 @@
         android:layout_marginBottom="20dp"/>
     <Button
         android:id="@+id/option_save_button"
-        android:text="SAVE OPTION"
-        android:textSize="20dp"
+        android:text="@string/save_option_en"
+        android:textSize="20sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_design"/>

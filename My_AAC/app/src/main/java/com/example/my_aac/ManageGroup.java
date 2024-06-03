@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,9 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 
@@ -80,8 +81,6 @@ public class ManageGroup {
 
     public static void createGroup(Context context, LinearLayout layout, GroupModel groupModel) {
 
-        Bitmap bitmap = loadBitmap(groupModel.getImagePath());
-
         SPManager spManager = new SPManager(context);
         List<GroupModel> list = spManager.getGroupList();
 
@@ -109,7 +108,9 @@ public class ManageGroup {
 
         try{
             fileCache.createNewFile();
-            out = new FileOutputStream(fileCache);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                out = Files.newOutputStream(fileCache.toPath());
+            }
 
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (IOException e) {
@@ -125,19 +126,10 @@ public class ManageGroup {
         }
     }
 
-    public static boolean deleteFile(String filePath, String filename) {
+    public static void deleteFile(String filePath, String filename) {
         File file = new File(filePath + filename + ".jpg");
         if (file.exists()) {
-            if (file.delete()) {
-                // 파일 삭제 성공
-                return true;
-            } else {
-                // 파일 삭제 실패
-                return false;
-            }
-        } else {
-            // 파일이 존재하지 않음
-            return false;
+            file.delete();
         }
     }
 }

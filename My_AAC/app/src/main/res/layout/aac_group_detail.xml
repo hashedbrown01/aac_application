@@ -10,15 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="AAC GROUP NAME"
+        android:text="@string/aac_group_name_en"
         style="@style/TitleStyle" />
     <Button
         android:id="@+id/create_aac_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADD AAC BUTTON"
+        android:text="@string/add_aac_button_en"
         android:background="@drawable/button_design"
-        android:textSize="20dp"
+        android:textSize="20sp"
         />
 
     <ScrollView

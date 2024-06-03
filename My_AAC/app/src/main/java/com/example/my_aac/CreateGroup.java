@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -16,19 +15,12 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class CreateGroup extends Activity {
     private Intent intent;
     private EditText name;
     private ImageView imageView;
-    private Button submit;
     private Bitmap bitmap;
     private String imagePath;
     private int id;
@@ -56,7 +48,7 @@ public class CreateGroup extends Activity {
             }
         });
         imageView.setImageResource(R.drawable.no_image);
-        submit = findViewById(R.id.group_submit_button);
+        Button submit = findViewById(R.id.group_submit_button);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
