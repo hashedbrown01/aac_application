@@ -1,10 +1,13 @@
 package com.example.my_aac;
 
+import static android.speech.tts.TextToSpeech.ERROR;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -16,18 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import static android.speech.tts.TextToSpeech.ERROR;
 
 
 public class ManageAAC {
@@ -37,52 +35,44 @@ public class ManageAAC {
         View layout = inflater.inflate(R.layout.aac_button, null);
         TextView textView = layout.findViewById(R.id.aac_name);
         ImageView imageView = layout.findViewById(R.id.aac_image);
-        SPManager spManager = new SPManager(context);
 
         textView.setText(aacModel.getAacTitle());
         imageView.setImageBitmap(loadBitmap(aacModel.getFilePath()));
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //여기에 구현
-                speak(context, aacModel.getAacDescription(), aacModel.getVoiceType());
+        layout.setOnClickListener(v -> {
+            //여기에 구현
+            speak(context, aacModel.getAacDescription(), aacModel.getVoiceType());
 
-                saveRecentAAC(context, aacModel.getId());
+            saveRecentAAC(context, aacModel.getId());
 
-                Intent intent = new Intent(context, ImageActivity.class);
-                intent.putExtra("imagePath", aacModel.getFilePath());
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(context, ImageActivity.class);
+            intent.putExtra("imagePath", aacModel.getFilePath());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                context.startActivity(intent);
-            }
+            context.startActivity(intent);
         });
 
-        layout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                SPManager spManager = new SPManager(context);
-                List<AACModel> list = spManager.getAACList();
-                Iterator<AACModel> iterator = list.iterator();
-                while (iterator.hasNext()) {
-                    AACModel model = iterator.next();
-                    if (model.getId() == aacModel.getId()) {
-                        iterator.remove();
+        layout.setOnLongClickListener(v -> {
+            SPManager spManager = new SPManager(context);
+            List<AACModel> list = spManager.getAACList();
+            Iterator<AACModel> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                AACModel model = iterator.next();
+                if (model.getId() == aacModel.getId()) {
+                    iterator.remove();
 
-                        removeRecentAAC(context, aacModel.getId());
-                        deleteFile(aacModel.getFilePath(), aacModel.getAacTitle());
-                        spManager.saveAACList(list);
-                        break;
-                    }
+                    removeRecentAAC(context, aacModel.getId());
+                    deleteFile(aacModel.getFilePath(), aacModel.getAacTitle());
+                    spManager.saveAACList(list);
+                    break;
                 }
-                gridLayout.removeView(v);
-                return true;
             }
+            gridLayout.removeView(v);
+            return true;
         });
 
         gridLayout.addView(layout);
     }
     public static void createAAC(Context context, GridLayout gridLayout, AACModel aacModel){
-        Bitmap bitmap = loadBitmap(aacModel.getFilePath());
 
         SPManager spManager = new SPManager(context);
         List<AACModel> list = spManager.getAACList();
@@ -112,8 +102,11 @@ public class ManageAAC {
 
         try{
             fileCache.createNewFile();
-            out = new FileOutputStream(fileCache);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                out = Files.newOutputStream(fileCache.toPath());
+            }
 
+            assert out != null;
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (IOException e) {
             e.printStackTrace();
@@ -128,20 +121,12 @@ public class ManageAAC {
         }
     }
 
-    public static boolean deleteFile(String filePath, String filename) {
+    public static void deleteFile(String filePath, String filename) {
         File file = new File(filePath + filename + ".jpg");
         if (file.exists()) {
-            if (file.delete()) {
-                // 파일 삭제 성공
-                return true;
-            } else {
-                // 파일 삭제 실패
-                return false;
-            }
-        } else {
-            // 파일이 존재하지 않음
-            return false;
+            file.delete();
         }
+
     }
 
     private static void saveRecentAAC(Context context, int aacId){
@@ -194,37 +179,34 @@ public class ManageAAC {
     }
 
     public static void speak(Context context, String text, String voiceType){
-        tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status != ERROR){
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("volume_value", 0);
-                    float volume = (float) (sharedPreferences.getInt("volume_value", 0) * 0.01);
+        tts = new TextToSpeech(context, status -> {
+            if(status != ERROR){
+                SharedPreferences sharedPreferences = context.getSharedPreferences("volume_value", 0);
+                float volume = (float) (sharedPreferences.getInt("volume_value", 0) * 0.01);
 
-                    if(voiceType.equals("male 1")){
-                        Voice v = new Voice("en-gb-x-gbd-network", new Locale("en", "us"), 400, 200, false, null);
-                        tts.setVoice(v);
-                    }else{
-                        Voice v = new Voice(" en-us-x-tpf-network", new Locale("en", "us"), 400, 200, false, null);
-                        tts.setVoice(v);
+                if(voiceType.equals("male 1")){
+                    Voice v = new Voice("en-gb-x-gbd-network", new Locale("en", "us"), 400, 200, false, null);
+                    tts.setVoice(v);
+                }else{
+                    Voice v = new Voice(" en-us-x-tpf-network", new Locale("en", "us"), 400, 200, false, null);
+                    tts.setVoice(v);
+                }
+
+                Bundle tts_bundle = new Bundle();
+                tts_bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume);
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, tts_bundle, null);
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {}
+
+                    @Override
+                    public void onDone(String utteranceId) {
+                        tts.shutdown();
                     }
 
-                    Bundle tts_bundle = new Bundle();
-                    tts_bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume);
-                    tts.speak(text, TextToSpeech.QUEUE_FLUSH, tts_bundle, null);
-                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                        @Override
-                        public void onStart(String utteranceId) {}
-
-                        @Override
-                        public void onDone(String utteranceId) {
-                            tts.shutdown();
-                        }
-
-                        @Override
-                        public void onError(String utteranceId) {}
-                    });
-                }
+                    @Override
+                    public void onError(String utteranceId) {}
+                });
             }
         });
     }

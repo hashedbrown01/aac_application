@@ -7,7 +7,7 @@
     android:padding="15dp">
 
     <TextView
-        android:text="AAC GROUPS"
+        android:text="@string/aac_groups_en"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -17,8 +17,8 @@
         android:id="@+id/add_group_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ADD GROUP"
-        android:textSize="20dp"
+        android:text="@string/aac_groups_en"
+        android:textSize="20sp"
         android:background="@drawable/button_design"
         android:layout_marginBottom="20dp"
         />
@@ -28,36 +28,39 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/group_container"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageButton
                 android:id="@+id/basic_group0"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
+                android:contentDescription="@string/img_content_desc_en"
                 android:scaleType="fitCenter"
-                android:src="@drawable/no_image" />
+                android:src="@drawable/circle_1" />
 
             <ImageButton
                 android:id="@+id/basic_group1"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
+                android:contentDescription="@string/img_content_desc_en"
                 android:scaleType="fitCenter"
-                android:src="@drawable/no_image" />
+                android:src="@drawable/circle_2" />
 
             <ImageButton
                 android:id="@+id/basic_group2"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
+                android:contentDescription="@string/img_content_desc_en"
                 android:scaleType="fitCenter"
-                android:src="@drawable/no_image" />
+                android:src="@drawable/circle_3" />
 
         </LinearLayout>
 
     </HorizontalScrollView>
 
     <TextView
-        android:text="Last Used AAC"
+        android:text="@string/last_used_aac"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"

@@ -6,29 +6,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class CreateGroup extends Activity {
     private Intent intent;
     private EditText name;
     private ImageView imageView;
-    private Button submit;
     private Bitmap bitmap;
     private String imagePath;
     private int id;
@@ -37,7 +28,7 @@ public class CreateGroup extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.make_new_group);
         Context context = getApplicationContext();
-        imagePath = String.valueOf(context.getFilesDir()) + "/images/";
+        imagePath = context.getFilesDir() + "/images/";
         intent = getIntent();
         id = intent.getIntExtra("group_id", -1);
         if(id == -1){
@@ -46,31 +37,25 @@ public class CreateGroup extends Activity {
         Log.d("CREATE_GROUP", String.valueOf(id));
         name = findViewById(R.id.insert_group_name);
         imageView = findViewById(R.id.insert_group_image);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(Intent.ACTION_GET_CONTENT);
-                intent1.setType("image/*");
+        imageView.setOnClickListener(v -> {
+            Intent intent1 = new Intent(Intent.ACTION_GET_CONTENT);
+            intent1.setType("image/*");
 
-                startActivityForResult(intent1, 1);
-            }
+            startActivityForResult(intent1, 1);
         });
         imageView.setImageResource(R.drawable.no_image);
-        submit = findViewById(R.id.group_submit_button);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String return_name = String.valueOf(name.getText());
-                if(bitmap != null){
-                    ManageGroup.saveBitmap(bitmap, imagePath, return_name);
+        Button submit = findViewById(R.id.group_submit_button);
+        submit.setOnClickListener(v -> {
+            String return_name = String.valueOf(name.getText());
+            if(bitmap != null){
+                ManageGroup.saveBitmap(bitmap, imagePath, return_name);
 
-                    imagePath = imagePath + return_name + ".jpg";
-                    GroupModel groupModel = new GroupModel(id, return_name, imagePath);
-                    intent = new Intent();
-                    intent.putExtra("group_model", groupModel);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+                imagePath = imagePath + return_name + ".jpg";
+                GroupModel groupModel = new GroupModel(id, return_name, imagePath);
+                intent = new Intent();
+                intent.putExtra("group_model", groupModel);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
