@@ -23,7 +23,7 @@
             android:contentDescription="@string/img_content_desc_en"
             android:scaleType="fitCenter"
             android:padding="10dp"
-            android:src ="@drawable/no_image"/>
+            android:src ="@drawable/aac_image"/>
         <ImageButton
             android:id="@+id/goto_qr_reading"
             android:layout_width="125dp"

@@ -17,7 +17,7 @@
         android:id="@+id/add_group_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/aac_groups_en"
+        android:text="@string/add_group_en"
         android:textSize="20sp"
         android:background="@drawable/button_design"
         android:layout_marginBottom="20dp"
